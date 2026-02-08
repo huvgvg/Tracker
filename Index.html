@@ -95,6 +95,9 @@
     .delete { background:none; border:none; color:var(--bad); font-size:1.1rem; cursor:pointer; margin-left:10px;}
     canvas { width:100% !important; max-height:420px; height:300px; touch-action: manipulation; }
     footer { text-align:center; padding:14px; font-size:0.7rem; opacity:0.45;}
+    /* MUSIC TAB STYLING */
+    #musicTab .controls { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+    #musicTab input[type="range"] { width:100%; margin-top:10px; }
   </style>
 </head>
 <body>
@@ -114,6 +117,7 @@
     <button id="tabBtnChart" onclick="openTab('chartTab')">Chart</button>
     <button id="tabBtnHistory" onclick="openTab('historyTab')">History</button>
     <button id="tabBtnNotes" onclick="openTab('notesTab')">Notes</button>
+    <button id="tabBtnMusic" onclick="openTab('musicTab')">Music</button>
   </nav>
 
   <div id="dashboard" class="tab active">
@@ -162,8 +166,28 @@
     </div>
   </div>
 
+  <!-- MUSIC TAB -->
+  <div id="musicTab" class="tab">
+    <div class="card">
+      <h3>🎵 Chill Music</h3>
+      <p>Click anywhere or use the buttons to play/pause.</p>
+      <div class="controls">
+        <button class="primary" onclick="playMusic()">▶ PLAY</button>
+        <button class="primary" onclick="pauseMusic()">⏸ PAUSE</button>
+      </div>
+      <div class="volume">
+        <input type="range" min="0" max="1" step="0.01" value="0.5" onchange="setVolume(this.value)">
+      </div>
+    </div>
+  </div>
+
   <footer>Neon Money Tracker Pro • Synced • Touch Optimized • PIN Protected</footer>
 </div>
+
+<!-- AUDIO -->
+<audio id="bgMusic" loop>
+  <source src="neon.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 const PIN = "3582";
@@ -275,6 +299,14 @@ function updateChart(){
   });
 }
 
+// MUSIC SETUP
+const music = document.getElementById("bgMusic");
+let started = false;
+document.body.addEventListener("click", () => { if(!started){ music.play(); started=true; }});
+function playMusic(){ music.play(); }
+function pauseMusic(){ music.pause(); }
+function setVolume(v){ music.volume=v; }
+
 function openTab(id){
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -283,12 +315,4 @@ function openTab(id){
   if(id==="chartTab") tabBtnChart.classList.add("active");
   if(id==="historyTab") tabBtnHistory.classList.add("active");
   if(id==="notesTab") tabBtnNotes.classList.add("active");
-  if(id==="chartTab") updateChart();
-}
-
-goalInput.addEventListener("input",()=>{ goal=Number(goalInput.value); saveData(); updateUI(); });
-updateUI();
-</script>
-
-</body>
-</html>
+  if(id==="musicTab") tabBtnMusic.class
